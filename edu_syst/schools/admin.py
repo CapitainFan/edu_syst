@@ -1,7 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import School, Form, Teacher, Student
-from django.contrib.auth.models import User
+from .models import School, Form, Teacher, Student, User
+
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'user_type', 'is_staff')
+    list_filter = ('user_type', 'is_staff')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'user_type')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
 
 
 @admin.register(School)
@@ -36,12 +47,12 @@ class FormAdmin(admin.ModelAdmin):
     get_all_students.short_description = 'Students'
 
 
-class TeacherAdmin(UserAdmin):
-    list_display = ('username', 'last_name', 'first_name', 'middle_name', 'subject', 'school')
+@admin.register(Teacher)
+class TeacherAdmin(admin.ModelAdmin):
+    list_display = ('user', 'last_name', 'first_name', 'middle_name', 'subject', 'school')
     list_filter = ('school', 'subject')
     search_fields = ('last_name', 'first_name', 'middle_name', 'subject', 'school__name')
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('last_name', 'first_name', 'middle_name', 'date_of_birth', 'subject', 'school', 'form')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
@@ -49,19 +60,14 @@ class TeacherAdmin(UserAdmin):
     filter_horizontal = ('groups', 'user_permissions')
 
 
-class StudentAdmin(UserAdmin):
-    list_display = ('username', 'last_name', 'first_name', 'middle_name', 'form', 'school')
+@admin.register(Student)
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'last_name', 'first_name', 'middle_name', 'form', 'school')
     list_filter = ('school', 'form')
     search_fields = ('last_name', 'first_name', 'middle_name', 'form__grade', 'form__letter', 'school__name')
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('last_name', 'first_name', 'middle_name', 'date_of_birth', 'form', 'school')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     filter_horizontal = ('groups', 'user_permissions')
-
-
-admin.site.register(Teacher, TeacherAdmin)
-admin.site.register(Student, StudentAdmin)
-admin.site.unregister(User)

@@ -1,11 +1,10 @@
 from rest_framework import permissions
 
-
 class IsAdminOrBelongsToUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return (
-            request.user.is_superuser
-            or obj == request.user)
+        if request.user.is_staff or request.user.is_admin:
+            return True
+        return obj.user == request.user
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):

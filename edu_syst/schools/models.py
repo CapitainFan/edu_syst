@@ -49,7 +49,20 @@ class Form(models.Model):
         return f'{self.grade} {self.letter}  -  {self.school}'
 
 
-class Teacher(AbstractUser):
+class User(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('user', 'User'),
+        ('teacher', 'Teacher'),
+        ('student', 'Student'),
+    )
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='user')
+
+    def __str__(self):
+        return self.username
+
+
+class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher')
     last_name = models.CharField(max_length=200)
     first_name = models.CharField(max_length=200)
     middle_name = models.CharField(max_length=200)
@@ -70,7 +83,6 @@ class Teacher(AbstractUser):
         related_name="teachers",
     )
 
-    # Указываем related_name для groups и user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='teacher_groups',
@@ -86,8 +98,12 @@ class Teacher(AbstractUser):
         verbose_name='user permissions',
     )
 
+    def __str__(self):
+        return f'{self.user.username} (Teacher)'
 
-class Student(AbstractUser):
+
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
     last_name = models.CharField(max_length=200)
     first_name = models.CharField(max_length=200)
     middle_name = models.CharField(max_length=200)
@@ -107,7 +123,6 @@ class Student(AbstractUser):
         related_name="students",
     )
 
-    # Указываем related_name для groups и user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='student_groups',
@@ -122,3 +137,6 @@ class Student(AbstractUser):
         help_text='Specific permissions for this student.',
         verbose_name='user permissions',
     )
+
+    def __str__(self):
+        return f'{self.user.username} (Student)'
