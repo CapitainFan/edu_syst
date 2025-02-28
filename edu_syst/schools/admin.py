@@ -54,8 +54,7 @@ class TeacherAdmin(admin.ModelAdmin):
     search_fields = ('last_name', 'first_name', 'middle_name', 'subject', 'school__name')
     fieldsets = (
         ('Personal info', {'fields': ('last_name', 'first_name', 'middle_name', 'date_of_birth', 'subject', 'school', 'form')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Permissions', {'fields': ('groups', 'user_permissions')}),
     )
     filter_horizontal = ('groups', 'user_permissions')
 
@@ -67,7 +66,6 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ('last_name', 'first_name', 'middle_name', 'form__grade', 'form__letter', 'school__name')
     fieldsets = (
         ('Personal info', {'fields': ('last_name', 'first_name', 'middle_name', 'date_of_birth', 'form', 'school')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Permissions', {'fields': ('groups', 'user_permissions')}),
     )
     filter_horizontal = ('groups', 'user_permissions')
