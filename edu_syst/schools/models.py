@@ -77,8 +77,8 @@ class Teacher(models.Model):
     )
     school = models.ForeignKey(
         School,
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         on_delete=models.CASCADE,
         related_name="teachers",
     )
@@ -117,8 +117,8 @@ class Student(models.Model):
     )
     school = models.ForeignKey(
         School,
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         on_delete=models.CASCADE,
         related_name="students",
     )

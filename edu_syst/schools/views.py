@@ -9,7 +9,7 @@ from rest_framework.decorators import action
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny]  # 
+    permission_classes = [permissions.AllowAny]
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -42,11 +42,32 @@ class SchoolViewSet(viewsets.ModelViewSet):
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['get'])
+    def get_list_of_forms(self, request, pk=None):
+        school = self.get_object()
+        forms = school.get_all_forms()
+        serializer = FormSerializer(forms, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def get_list_of_teachers(self, request, pk=None):
+        school = self.get_object()
+        teachers = school.get_all_teachers()
+        serializer = TeacherSerializer(teachers, many=True)
+        return Response(serializer.data)
+
 
 class FormViewSet(viewsets.ModelViewSet):
     queryset = Form.objects.all()
     serializer_class = FormSerializer
     permission_classes = [permissions.AllowAny]  # [IsStudentOrTeacherOnlyRead]
+
+    @action(detail=True, methods=['get'])
+    def get_list_of_students(self, request, pk=None):
+        form = self.get_object()
+        students = form.get_all_students()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
 
 
 '''
