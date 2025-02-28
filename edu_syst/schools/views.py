@@ -3,9 +3,13 @@ from .models import User, Teacher, Student, School, Form
 from .serializers import UserSerializer, TeacherSerializer, StudentSerializer, SchoolSerializer, FormSerializer
 from .permissions import IsAdminOrReadOnly, IsAdminOrBelongsToUser, IsStudentOrTeacherOnlyRead
 from rest_framework import generics, permissions
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticated, IsAdminUser,
+                                        IsAuthenticatedOrReadOnly)
 from .serializers import UserRegistrationSerializer
+from rest_framework import renderers
 from rest_framework.decorators import action
-
+from rest_framework.response import Response
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
@@ -71,7 +75,6 @@ class FormViewSet(viewsets.ModelViewSet):
 
 
 '''
-http://127.0.0.1:8000/schools/1/get_list_of_students/
 
 * Добавить функцию которая при создаии Form, 
 автоматически добавляла связь OneToOne (class_teacher)
@@ -83,7 +86,5 @@ http://127.0.0.1:8000/schools/1/get_list_of_students/
 
 * Добавить логин
 
-
-* Добавить эндпоинты на отображение всех учеников/учителей для клссов/школ
 
 '''
