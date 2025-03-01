@@ -119,3 +119,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Стандартный бэкенд
     'schools.backend.CustomAuthBackend',  # Кастомный бэкенд
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Используем JWT
+    ],
+}
