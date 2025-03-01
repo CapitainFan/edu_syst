@@ -72,19 +72,3 @@ class FormViewSet(viewsets.ModelViewSet):
         students = form.get_all_students()
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data)
-
-
-'''
-
-* Добавить функцию которая при создаии Form, 
-автоматически добавляла связь OneToOne (class_teacher)
-для класса Teacher в поле form
-
-
-* Разобраться с правами доступа 
-
-
-* Добавить логин
-
-
-'''
