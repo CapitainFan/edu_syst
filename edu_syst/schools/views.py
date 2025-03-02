@@ -1,43 +1,43 @@
 from rest_framework import viewsets
 from .models import User, Teacher, Student, School, Form
 from .serializers import UserSerializer, TeacherSerializer, StudentSerializer, SchoolSerializer, FormSerializer
-from .permissions import IsAdminOrReadOnly, IsAdminOrBelongsToUser, IsStudentOrTeacherOnlyRead
-from rest_framework import generics, permissions
+from .permissions import IsAdminOrReadOnly, IsAdminOrBelongsToUser, IsStudentOrTeacher, IsAdminOrBelongsTo
+from rest_framework import generics
 from rest_framework.permissions import (SAFE_METHODS, AllowAny,
                                         IsAuthenticated, IsAdminUser,
                                         IsAuthenticatedOrReadOnly)
 from .serializers import UserRegistrationSerializer
-from rest_framework import renderers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]  # [IsAdminOrBelongsToUser]
+    permission_classes = [IsAdminOrBelongsToUser]
 
 
 class TeacherViewSet(viewsets.ModelViewSet):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
-    permission_classes = [permissions.AllowAny]  # [IsAdminOrBelongsToUser]
+    permission_classes = [IsAdminOrBelongsTo]
 
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [permissions.AllowAny]  # [IsAdminOrBelongsToUser]
+    permission_classes = [IsAdminOrBelongsTo]
 
 
 class SchoolViewSet(viewsets.ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
-    permission_classes = [permissions.AllowAny]  # [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
     @action(detail=True, methods=['get'])
     def get_list_of_students(self, request, pk=None):
@@ -64,7 +64,7 @@ class SchoolViewSet(viewsets.ModelViewSet):
 class FormViewSet(viewsets.ModelViewSet):
     queryset = Form.objects.all()
     serializer_class = FormSerializer
-    permission_classes = [permissions.AllowAny]  # [IsStudentOrTeacherOnlyRead]
+    permission_classes = [IsStudentOrTeacher]
 
     @action(detail=True, methods=['get'])
     def get_list_of_students(self, request, pk=None):
