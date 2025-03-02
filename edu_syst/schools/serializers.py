@@ -85,6 +85,9 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 
 class FormSerializer(serializers.ModelSerializer):
+    school = SchoolSerializer(read_only=True)  # Вложенный сериализатор для School
+    class_teacher = TeacherSerializer(read_only=True)  # Вложенный сериализатор для Teacher
+
     class Meta:
         model = Form
         fields = '__all__'
