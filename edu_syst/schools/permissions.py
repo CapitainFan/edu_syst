@@ -28,4 +28,4 @@ class IsStudentOrTeacher(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return (
             request.user in obj.get_all_students()
-            or request.user is obj.class_teacher)
+            or request.user is obj.class_teacher.user)
